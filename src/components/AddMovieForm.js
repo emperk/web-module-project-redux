@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { Link, useHistory } from 'react-router-dom';
 
-const AddMovieForm = (props) => {
+const AddMovieForm = ({createMovie}) => {
     const { push } = useHistory();
 
     const [movie, setMovie] = useState({
@@ -22,7 +22,9 @@ const AddMovieForm = (props) => {
         });
     }
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (details) => {
+        createMovie(details);
+        push("/")
     }
 
     const { title, director, genre, metascore, description } = movie;
@@ -59,7 +61,12 @@ const AddMovieForm = (props) => {
                     </div>
                     <div className="modal-footer">
                         <input type="submit" className="btn btn-success" value="Add"/>
-                        <Link to={`/movies`}><input type="button" className="btn btn-default" value="Cancel"/></Link>
+                        <Link to={`/movies`}>
+                            <input 
+                                type="button" 
+                                className="btn btn-default" 
+                                value="Cancel"/>
+                        </Link>
                     </div>
                 </form>
             </div>
@@ -67,4 +74,10 @@ const AddMovieForm = (props) => {
     </div>);
 }
 
-export default AddMovieForm;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        createMovie: (payload) => dispatch(addMovie(payload)),
+    };
+};
+
+export default connect(mapDispatchToProps)(AddMovieForm);
